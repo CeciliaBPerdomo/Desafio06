@@ -20,18 +20,17 @@ npm i ejs
 
 let socket = io.connect()
 
-socket.on('messages', function(data){
-    console.log(data)
-    render(data)
-})
-
 function render(data) {
-    let html = data.map(function(elem, index){
-        return(`<div>
-        <strong>${elem.author}</strong>:
-        <em>${elem.text}</em></div>`)
-    }).join(" ")
-    document.getElementById('messages').innerHTML = html
+    if (data) {
+        let html = data.map(function(elem, index){
+            return(`<div>
+            <strong>${elem.author}</strong>:
+            <em>${elem.text}</em></div>`)
+        }).join(" ")
+        document.getElementById('messages').innerHTML = html
+    } else {
+        document.getElementById('messages').innerHTML =  `<strong>Todavía no hay mensajes, se el primero!</strong>`
+    }
 }
 
 function addMessage(e) {
@@ -47,3 +46,8 @@ function addMessage(e) {
 
     return false
 }
+
+socket.on('messages', function(data){
+    console.log(data)
+    render(data)
+})
